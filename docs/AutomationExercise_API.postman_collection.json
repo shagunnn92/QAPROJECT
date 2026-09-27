@@ -1,0 +1,462 @@
+{
+  "info": {
+    "_postman_id": "growthjockey-qa-automationexercise",
+    "name": "AutomationExercise QA API Suite",
+    "description": "API regression collection based on the public Automation Exercise API practice endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://automationexercise.com"
+    },
+    {
+      "key": "testEmail",
+      "value": "qa-{{$timestamp}}@example.com"
+    },
+    {
+      "key": "testPassword",
+      "value": "QaTest@12345"
+    }
+  ],
+  "item": [
+    {
+      "name": "GET Products List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/productsList",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "productsList"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('responseCode is 200', () => pm.expect(body.responseCode).to.eql(200));",
+              "pm.test('products is a non-empty array', () => pm.expect(body.products).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Products List - Method Rejected",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/productsList",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "productsList"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 405', () => pm.response.to.have.status(405));",
+              "pm.test('Method is not supported', () => pm.expect(pm.response.text()).to.include('not supported'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET Brands List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/brandsList",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "brandsList"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('brands is a non-empty array', () => pm.expect(body.brands).to.be.an('array').that.is.not.empty);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PUT Brands List - Method Rejected",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/brandsList",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "brandsList"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 405', () => pm.response.to.have.status(405));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Search Product",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/searchProduct",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "searchProduct"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "search_product",
+              "value": "tshirt"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('responseCode is 200', () => pm.expect(body.responseCode).to.eql(200));",
+              "pm.test('products array exists', () => pm.expect(body.products).to.be.an('array'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Search Product - Missing Parameter",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/searchProduct",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "searchProduct"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('Missing parameter is reported', () => pm.expect(pm.response.text()).to.include('search_product'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Verify Login - Invalid",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/verifyLogin",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "verifyLogin"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "invalid_user_qa@example.com"
+            },
+            {
+              "key": "password",
+              "value": "wrongpassword"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+              "pm.test('User not found is reported', () => pm.expect(pm.response.text()).to.include('User not found'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Create Account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/createAccount",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "createAccount"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "name",
+              "value": "QA Automation"
+            },
+            {
+              "key": "email",
+              "value": "{{testEmail}}"
+            },
+            {
+              "key": "password",
+              "value": "{{testPassword}}"
+            },
+            {
+              "key": "title",
+              "value": "Mr"
+            },
+            {
+              "key": "birth_date",
+              "value": "10"
+            },
+            {
+              "key": "birth_month",
+              "value": "10"
+            },
+            {
+              "key": "birth_year",
+              "value": "2000"
+            },
+            {
+              "key": "firstname",
+              "value": "QA"
+            },
+            {
+              "key": "lastname",
+              "value": "Automation"
+            },
+            {
+              "key": "company",
+              "value": "GrowthJockey Practice"
+            },
+            {
+              "key": "address1",
+              "value": "Test Address"
+            },
+            {
+              "key": "address2",
+              "value": ""
+            },
+            {
+              "key": "country",
+              "value": "India"
+            },
+            {
+              "key": "zipcode",
+              "value": "147001"
+            },
+            {
+              "key": "state",
+              "value": "Punjab"
+            },
+            {
+              "key": "city",
+              "value": "Patiala"
+            },
+            {
+              "key": "mobile_number",
+              "value": "9999999999"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+              "pm.test('Account created', () => pm.expect(pm.response.text()).to.include('User created'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET User Detail By Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/getUserDetailByEmail",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "getUserDetailByEmail"
+          ],
+          "query": [
+            {
+              "key": "email",
+              "value": "{{testEmail}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "const body = pm.response.json();",
+              "pm.test('responseCode is 200', () => pm.expect(body.responseCode).to.eql(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE Test Account",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/deleteAccount",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "deleteAccount"
+          ]
+        },
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "{{testEmail}}"
+            },
+            {
+              "key": "password",
+              "value": "{{testPassword}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Account deleted', () => pm.expect(pm.response.text()).to.include('Account deleted'));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

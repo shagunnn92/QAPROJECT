@@ -2,7 +2,7 @@
 
 ![QA Regression](https://github.com/shagunnn92/QAPROJECT/actions/workflows/qa.yml/badge.svg)
 
-A QA automation project built around the AutomationExercise web application. The project combines manual test case design, UI automation, API testing, defect tracking, and continuous integration using GitHub Actions.
+A QA project built around the AutomationExercise web application. The project combines manual test case design, UI automation, API testing, defect tracking, and continuous integration using GitHub Actions.
 
 ## What I worked on
 
@@ -17,12 +17,12 @@ A QA automation project built around the AutomationExercise web application. The
 
 ## Tools Used
 
-- **Playwright** — UI and API automation
-- **JavaScript** — test implementation
-- **Postman** — API testing
-- **Git & GitHub** — version control
-- **GitHub Actions** — CI automation
-- **Excel / Word / Markdown** — QA documentation
+- Playwright — UI and API automation
+- JavaScript — test implementation
+- Postman — API testing
+- Git & GitHub— version control
+- GitHub Actions— CI automation
+- Excel / Word / Markdown — QA documentation
 
 ## Automated Testing
 
@@ -135,3 +135,7 @@ Install the project dependencies:
 
 ```bash
 npm install
+npx playwright install
+npm test
+npx playwright test tests/ui/smoke.spec.js
+npm run report
